@@ -105,7 +105,7 @@ def compare_zip_files_sizes(path_files_a: str, path_files_b: str, logger):
     is_at_least_one_diff = False
 
     for i in range(0, size):
-        logger.debug(f"\n\n comparing files sizes: {common_full_path_a[i]} and {common_full_path_b[i]} \n\n")
+        logger.info(f"\n\n comparing files sizes: {common_full_path_a[i]} and {common_full_path_b[i]} \n\n")
         zp_a = zipfile.ZipFile(common_full_path_a[i])
         zp_b = zipfile.ZipFile(common_full_path_b[i])
 
