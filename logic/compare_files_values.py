@@ -1,6 +1,11 @@
-from infra.utils import get_files, find_first_cond
+import os
+from datetime import datetime
+
+from definitions import OUTPUT_RESULT_PDF
+from infra.utils import get_files, find_first_cond, get_file_name_from_path
 from logic.set_diff_and_common_names import common_names_two_folders
 import aspose.words as aw
+
 
 def get_common_files_path(path_files_a: str, path_files_b: str, logger):
     common_file_names = common_names_two_folders(path_files_a, path_files_b, logger=logger)
@@ -77,3 +82,15 @@ def compare_file_pdf_values(path_files_a: str, path_files_b: str, logger):
     size = len(common_full_path_a)
     logger.info(f"\n\n number of same file name: {size} \n\n")
 
+    for i in range(0, size):
+        logger.debug(f"\n\n comparing files: {common_full_path_a[i]} and {common_full_path_b[i]} \n\n")
+        file_name = get_file_name_from_path(common_full_path_a[i])
+        docA = aw.Document(common_full_path_a[i])
+        docB = aw.Document(common_full_path_b[i])
+
+        # There should be no revisions before comparison.
+        docA.accept_all_revisions()
+        docB.accept_all_revisions()
+
+        docA.compare(docB, "Author Name", datetime.now())
+        docA.save(f"{os.path.join(OUTPUT_RESULT_PDF, str(datetime.now().date()))} - {file_name}")

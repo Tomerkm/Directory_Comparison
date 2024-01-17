@@ -1,7 +1,7 @@
 import pytest
 
 from definitions import DATA_FILES_TXT_CMP, FOLDER_FILES_TYPE_TEXT_PATH, DATA_FILES_PDF_CMP
-from logic.compare_files_values import compare_file_txt_values
+from logic.compare_files_values import compare_file_txt_values, compare_file_pdf_values
 
 
 @pytest.mark.parametrize("path_files_a, path_files_b", DATA_FILES_TXT_CMP,
@@ -21,6 +21,6 @@ def test_cmp_same_txt_files_values(get_test_name, get_logger, get_config):
 @pytest.mark.parametrize("path_files_a, path_files_b", DATA_FILES_PDF_CMP,
                          ids=["compare pdf files"])
 def test_cmp_pdf_files_values(path_files_a, path_files_b, get_test_name, get_logger, get_config):
-    res = compare_file_txt_values(path_files_a, path_files_b, logger=get_logger)
-    for num in res:
-        assert 0 < num
+    compare_file_pdf_values(path_files_a, path_files_b, logger=get_logger)
+
+

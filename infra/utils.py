@@ -3,6 +3,10 @@ from typing import Generator
 import pathlib
 
 
+def get_file_name_from_path(file_path):
+    return os.path.basename(file_path)
+
+
 def find_first_cond(data, func, **kwargs):
     for val in data:
         if func(val, **kwargs):
