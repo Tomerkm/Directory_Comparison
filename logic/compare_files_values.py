@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-
+import zipfile
 from definitions import OUTPUT_RESULT_PDF
 from infra.utils import get_files, find_first_cond, get_file_name_from_path
 from logic.set_diff_and_common_names import common_names_two_folders
@@ -94,3 +94,31 @@ def compare_file_pdf_values(path_files_a: str, path_files_b: str, logger):
 
         docA.compare(docB, "Author Name", datetime.now())
         docA.save(f"{os.path.join(OUTPUT_RESULT_PDF, str(datetime.now().date()))} - {file_name}")
+
+
+def compare_zip_files_sizes(path_files_a: str, path_files_b: str, logger):
+    common_full_path_a, common_full_path_b = get_common_files_path(path_files_a, path_files_b, logger=logger)
+
+    # same size
+    size = len(common_full_path_a)
+    logger.info(f"\n\n number of same file name: {size} \n\n")
+    is_at_least_one_diff = False
+
+    for i in range(0, size):
+        logger.debug(f"\n\n comparing files sizes: {common_full_path_a[i]} and {common_full_path_b[i]} \n\n")
+        zp_a = zipfile.ZipFile(common_full_path_a[i])
+        zp_b = zipfile.ZipFile(common_full_path_b[i])
+
+        size_a = sum([zinfo.file_size for zinfo in zp_a.filelist])
+        size_b = sum([zinfo.file_size for zinfo in zp_b.filelist])
+        zip_kb_a = float(size_a) / 1000  # kB
+        zip_kb_b = float(size_b) / 1000  # kB
+
+        if size_a != size_b:
+            is_at_least_one_diff = True
+
+        logger.info(f"\n\n file size in param a = {zip_kb_a} kb \n\n")
+        logger.info(f"\n\n file size in param b = {zip_kb_b} kb \n\n")
+
+
+    return is_at_least_one_diff
