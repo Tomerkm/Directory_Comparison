@@ -33,7 +33,7 @@ def get_test_name(request):
 def get_logger(get_test_name, get_config):
     logger = logging.getLogger(name=get_test_name)
 
-    log_level = get_config["LOG_CONFIG"]["level"].upper().replace(" ", "")
+    log_level = mapping_logging_level[get_config["LOG_CONFIG"]["level"].upper().replace(" ", "")]
     formatter = get_config["LOG_CONFIG"]["formatter"].lower()
     date_formatter = get_config["LOG_CONFIG"]["date_formatter"]
 
